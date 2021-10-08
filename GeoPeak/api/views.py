@@ -7,6 +7,9 @@ from rest_framework.parsers import JSONParser
 from .models import Peak
 from .serializers import PeakSerialiser
 
+import json
+from io import StringIO
+import csv
 
 @csrf_exempt
 @api_view(["GET", "POST"])
@@ -66,3 +69,28 @@ def detail_peak(request, pk):
         json_response = JsonResponse({'message': 'Peak was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
 
     return json_response
+
+@api_view(["POST"])
+def upload_list_peak(request):
+    uploaded_file = request.FILES["file"]
+    json_response = []
+    for chunk in uploaded_file.chunks():
+        iofile = StringIO(chunk.decode("utf8"))
+        uploaded_csv = csv.reader(iofile, delimiter="|")
+        for item in uploaded_csv:
+            peak_data =                 {
+                    "name" : item[0],
+                    "altitude": item[1],
+                    "lat": item[2],
+                    "long": item[3]
+                }
+            peaks_serialiser = PeakSerialiser(data=peak_data)
+            if peaks_serialiser.is_valid():
+                peaks_serialiser.save()
+                peak_data["record_status"] = "success"
+            else:
+                peak_data["record_status"] = "error"
+            json_response.append(peak_data)
+    return JsonResponse(json_response, safe=False)
+
+
