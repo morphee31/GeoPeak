@@ -1,14 +1,12 @@
-from django.shortcuts import render
 import os
-import plotly.graph_objects as go
-from plotly.offline import plot
-from api.models import Peak
-
 from statistics import mean
 
+import plotly.graph_objects as go
+from api.models import Peak
+from django.shortcuts import render
+from plotly.offline import plot
+
 print(os.path.dirname(__file__))
-
-
 
 
 def generate_peak_point(peak_list):
@@ -21,6 +19,7 @@ def generate_peak_point(peak_list):
         l_peak_lon.append(peak.long)
 
     return l_peak_name, l_peak_lat, l_peak_lon
+
 
 def show_peaks(request):
     path_token_file = os.path.join(os.path.dirname(__file__), ".mapbox_token")
@@ -48,8 +47,8 @@ def show_peaks(request):
             accesstoken=mapbox_access_token,
             bearing=0,
             center=dict(
-                lat=mean([min(l_lats),max(l_lats)]),
-                lon=mean([min(l_lons),max(l_lons)])
+                lat=mean([min(l_lats), max(l_lats)]),
+                lon=mean([min(l_lons), max(l_lons)])
             ),
             pitch=0,
             zoom=8

@@ -1,3 +1,6 @@
+import csv
+from io import StringIO
+
 from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
@@ -7,9 +10,6 @@ from rest_framework.parsers import JSONParser
 from .models import Peak
 from .serializers import PeakSerialiser
 
-import json
-from io import StringIO
-import csv
 
 @csrf_exempt
 @api_view(["GET", "POST"])
@@ -70,6 +70,7 @@ def detail_peak(request, pk):
 
     return json_response
 
+
 @api_view(["POST"])
 def upload_list_peak(request):
     uploaded_file = request.FILES["file"]
@@ -78,12 +79,12 @@ def upload_list_peak(request):
         iofile = StringIO(chunk.decode("utf8"))
         uploaded_csv = csv.reader(iofile, delimiter="|")
         for item in uploaded_csv:
-            peak_data =                 {
-                    "name" : item[0],
-                    "altitude": item[1],
-                    "lat": item[2],
-                    "long": item[3]
-                }
+            peak_data = {
+                "name": item[0],
+                "altitude": item[1],
+                "lat": item[2],
+                "long": item[3]
+            }
             peaks_serialiser = PeakSerialiser(data=peak_data)
             if peaks_serialiser.is_valid():
                 peaks_serialiser.save()
@@ -92,5 +93,3 @@ def upload_list_peak(request):
                 peak_data["record_status"] = "error"
             json_response.append(peak_data)
     return JsonResponse(json_response, safe=False)
-
-
