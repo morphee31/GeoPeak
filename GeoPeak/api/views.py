@@ -2,19 +2,22 @@ import csv
 from io import StringIO
 
 from django.http.response import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
+from rest_framework.views import APIView
 
 from .models import Peak
 from .serializers import PeakSerialiser
 
 
-@csrf_exempt
-@api_view(["GET", "POST"])
-def list_peak(request):
-    if request.method == "GET":
+class ListPeakViews(APIView):
+    """
+    CRUD Api from peak
+    """
+
+    def get(self, request, *args, **kwargs):
+        """List all peak record"""
         peak_name = request.GET.get("name", None)
         if peak_name:
             peaks = Peak.objects.filter(name__icontains=peak_name)
@@ -22,8 +25,19 @@ def list_peak(request):
             peaks = Peak.objects.all()
 
         peak_serialiser = PeakSerialiser(peaks, many=True)
-        json_response = JsonResponse(peak_serialiser.data, safe=False)
-    elif request.method == "POST":
+        return JsonResponse(peak_serialiser.data, safe=False)
+
+    def post(self, request, *args, **kwargs):
+        """
+            create peak record.
+            Pass json body
+                {
+                    "name": "Mont",
+                    "lat": 42.6755556,
+                    "long": 0.03444444,
+                    "altitude": 3348
+                }
+        """
         new_peak_data = JSONParser().parse(request)
         new_peak_serialiser = PeakSerialiser(data=new_peak_data)
         if new_peak_serialiser.is_valid():
@@ -31,48 +45,71 @@ def list_peak(request):
             json_response = JsonResponse(new_peak_serialiser.data, status=status.HTTP_201_CREATED)
         else:
             json_response = JsonResponse(new_peak_serialiser.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == "DELETE":
-        count = Peak.objects.all().delete()
-        json_response = JsonResponse({'message': f'{count} peaks was deleted successfully!'},
-                                     status=status.HTTP_204_NO_CONTENT)
-
-    return json_response
+        return json_response
 
 
-@api_view(["GET", "PUT", "DELETE"])
-def detail_peak(request, pk):
-    """
-    Read a record
-    :param request:
-    :return:
+class DetailPeakViews(APIView):
+    """CRUD Api from peak
+     get:
+        Retunrn list
     """
 
-    try:
-        peak = Peak.objects.get(pk=pk)
-    except Peak.DoesNotExist:
-        return JsonResponse({'message': 'The peak does not exist'}, status=status.HTTP_404_NOT_FOUND)
+    def get(self, request, *args, **kwargs):
+        """
+        Get peak by id.
+        """
+        try:
+            peak = Peak.objects.get(pk=kwargs["pk"])
+            peak_serialiser = PeakSerialiser(peak, many=False)
+            json_response = JsonResponse(peak_serialiser.data, safe=False)
+        except Peak.DoesNotExist:
+            json_response = JsonResponse({'message': 'The peak does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        return json_response
 
-    if request.method == "GET":
-        peak_serialiser = PeakSerialiser(peak, many=False)
-        json_response = JsonResponse(peak_serialiser.data, safe=False)
-    elif request.method == "PUT":
-        data_to_update = JSONParser().parse(request)
-        updated_peak_serialiser = PeakSerialiser(peak, data=data_to_update)
-        if updated_peak_serialiser.is_valid():
-            updated_peak_serialiser.save()
-            json_response = JsonResponse(updated_peak_serialiser.data)
-        else:
-            json_response = JsonResponse(updated_peak_serialiser.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, *args, **kwargs):
+        """
+        Update peak record by id.
+        Pass json body
+            {
+                "name": "Mont",
+                "lat": 42.6755556,
+                "long": 0.03444444,
+                "altitude": 3348
+            }
+        """
+        try:
+            peak = Peak.objects.get(pk=kwargs["pk"])
+            data_to_update = JSONParser().parse(request)
+            updated_peak_serialiser = PeakSerialiser(peak, data=data_to_update)
+            if updated_peak_serialiser.is_valid():
+                updated_peak_serialiser.save()
+                json_response = JsonResponse(updated_peak_serialiser.data)
+            else:
+                json_response = JsonResponse(updated_peak_serialiser.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Peak.DoesNotExist:
+            json_response = JsonResponse({'message': 'The peak does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        return json_response
 
-    elif request.method == "DELETE":
-        peak.delete()
-        json_response = JsonResponse({'message': 'Peak was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
-
-    return json_response
+    def delete(self, request, *args, **kwargs):
+        """
+        Remove peak record by id
+        """
+        try:
+            peak = Peak.objects.get(pk=kwargs["pk"])
+            peak.delete()
+            json_response = JsonResponse({'message': 'Peak was deleted successfully!'},
+                                         status=status.HTTP_204_NO_CONTENT)
+        except Peak.DoesNotExist:
+            json_response = JsonResponse({'message': 'The peak does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        return json_response
 
 
 @api_view(["POST"])
 def upload_list_peak(request):
+    """
+    Record peaks from csv file
+    (csv format : name|altitude|latitude|longitude)
+    """
     uploaded_file = request.FILES["file"]
     json_response = []
     for chunk in uploaded_file.chunks():
