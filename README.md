@@ -39,7 +39,10 @@ URL server : [localhost:8000](http://localhost:8000)
 
 ### Production server
 
-Config server file : [.env.dev]()
+Config server files : 
+- webserver : [.env.prod]()
+- database : [.env.prod.db]()
+
 To deploy and run production server :
 ```docker
 cd MFI_GeoPeak
@@ -52,3 +55,4 @@ docker-compose -f docker-compose.prod.yml logs -f
 ```
 
 URL server : [localhost:1337](http://localhost:1337)
+
