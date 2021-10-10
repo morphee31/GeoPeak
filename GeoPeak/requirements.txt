@@ -4,3 +4,4 @@ django-cors-headers==3.10.0
 djangorestframework==3.12.4
 plotly==5.3.1
 psycopg2-binary==2.9.1
+coreapi==2.3.3

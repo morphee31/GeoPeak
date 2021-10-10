@@ -32,6 +32,8 @@ To deploy and run development server :
 ```docker
 cd MFI_GeoPeak
 docker-compose up -d --build
+# create admin user
+docker-compose -f docker-compose.prod.yml exec web python manage.py createsuperuser
 ```
 
 To display server logs : 
@@ -51,6 +53,11 @@ To deploy and run production server :
 ```docker
 cd MFI_GeoPeak
 docker-compose -f docker-compose.prod.yml up -d --build
+docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
+# create admin user
+docker-compose -f docker-compose.prod.yml exec web python manage.py createsuperuser
+
 ```
 
 To display server logs : 
@@ -80,4 +87,7 @@ Vignemale|3298|42.7738889|0.14722223
 Pic Perdiguère|3222|42.6919444|0.51888889
 Pic Long|3192|42.8011111|0.10027777
 ```
+
+### Admin interface
+URL: `<hostname>:<port>/admin`
 
