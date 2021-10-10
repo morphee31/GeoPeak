@@ -24,6 +24,10 @@ git clone https://github.com/morphee31/GeoPeak.git
 
 
 ### Development server
+
+Config server files : 
+- webserver and database: [.env.dev](https://github.com/morphee31/GeoPeak/blob/master/.env.dev)
+
 To deploy and run development server :
 ```docker
 cd MFI_GeoPeak
@@ -40,8 +44,8 @@ URL server : [localhost:8000](http://localhost:8000)
 ### Production server
 
 Config server files : 
-- webserver : [.env.prod]()
-- database : [.env.prod.db]()
+- webserver : [.env.prod](https://github.com/morphee31/GeoPeak/blob/master/.env.prod)
+- database : [.env.prod.db](https://github.com/morphee31/GeoPeak/blob/master/.env.prod.db)
 
 To deploy and run production server :
 ```docker
