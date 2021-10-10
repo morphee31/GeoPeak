@@ -33,7 +33,7 @@ To deploy and run development server :
 cd GeoPeak
 docker-compose up -d --build
 # create admin user
-docker-compose -f docker-compose.prod.yml exec web python manage.py createsuperuser
+docker-compose exec web python manage.py createsuperuser
 ```
 
 To display server logs : 
