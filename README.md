@@ -15,7 +15,7 @@ It implements the following features:
 - 
 ## Deployment 
 
-
+[Docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/) are mandatory.
 
 ### Get project
 ```
@@ -51,10 +51,9 @@ Config server files :
 
 To deploy and run production server :
 ```docker
-cd MFI_GeoPeak
+cd GeoPeak
 docker-compose -f docker-compose.prod.yml up -d --build
 docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
-docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
 # create admin user
 docker-compose -f docker-compose.prod.yml exec web python manage.py createsuperuser
 
