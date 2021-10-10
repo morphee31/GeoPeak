@@ -57,4 +57,4 @@ def show_peaks(request):
 
     plot_div = plot(fig, output_type='div')
 
-    return render(request, "map.html", context={'plot_div': plot_div})
+    return render(request, "map/map.html", context={'plot_div': plot_div})
