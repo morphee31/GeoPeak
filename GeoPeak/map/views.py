@@ -38,6 +38,8 @@ def show_peaks(request):
         text=l_names
     )
     fig = go.Figure(scatter_mapbox)
+    center_lat = mean([min(l_lats), max(l_lats)]) if l_lats else 43.6044622
+    center_lon = mean([min(l_lons), max(l_lons)]) if l_lats else 1.4442469
     fig.update_layout(
         autosize=True,
         width=1500,
@@ -47,8 +49,8 @@ def show_peaks(request):
             accesstoken=mapbox_access_token,
             bearing=0,
             center=dict(
-                lat=mean([min(l_lats), max(l_lats)]),
-                lon=mean([min(l_lons), max(l_lons)])
+                lat=center_lat,
+                lon=center_lon
             ),
             pitch=0,
             zoom=8
