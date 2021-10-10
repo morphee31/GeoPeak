@@ -67,10 +67,11 @@ Map : `<hostname>:<port>`
 
 ### CRUD peak api  
 
-#### Documentation :`<hostname>:<port>/api/docs`
+#### Documentation :
+URL : `<hostname>:<port>/api/docs`
 
 #### Push from file
-`<hostname>:<port>/api/insert_with_csv`
+URL : `<hostname>:<port>/api/insert_with_csv`
 format csv file : `name|altitude|latitude|longitude`
 
 **Example** :
