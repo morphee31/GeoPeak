@@ -98,7 +98,7 @@ class DetailPeakViews(APIView):
             peak = Peak.objects.get(pk=kwargs["pk"])
             peak.delete()
             json_response = JsonResponse({'message': 'Peak was deleted successfully!'},
-                                         status=status.HTTP_204_NO_CONTENT)
+                                         status=status.HTTP_200_OK)
         except Peak.DoesNotExist:
             json_response = JsonResponse({'message': 'The peak does not exist'}, status=status.HTTP_404_NOT_FOUND)
         return json_response
