@@ -60,3 +60,23 @@ docker-compose -f docker-compose.prod.yml logs -f
 
 URL server : [localhost:1337](http://localhost:1337)
 
+## URLs
+
+### Map of peaks
+Map : `<hostname>:<port>`
+
+### CRUD peak api  
+
+#### Documentation :`<hostname>:<port>/api/docs`
+
+#### Push from file
+`<hostname>:<port>/api/`
+format csv file : `name|altitude|latitude|longitude`
+
+**Example** :
+```
+Vignemale|3298|42.7738889|0.14722223
+Pic Perdiguère|3222|42.6919444|0.51888889
+Pic Long|3192|42.8011111|0.10027777
+```
+
