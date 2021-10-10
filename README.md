@@ -70,7 +70,7 @@ Map : `<hostname>:<port>`
 #### Documentation :`<hostname>:<port>/api/docs`
 
 #### Push from file
-`<hostname>:<port>/api/`
+`<hostname>:<port>/api/insert_with_csv`
 format csv file : `name|altitude|latitude|longitude`
 
 **Example** :
