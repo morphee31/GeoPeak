@@ -90,7 +90,9 @@ Pic Long|3192|42.8011111|0.10027777
 ### Admin interface
 URL: `<hostname>:<port>/admin`
 
-With your admin interface you can record new country from filter ip : `Allow countrys` table. 
+With admin interface, you can record new country for filter ip : `Allow countrys` table. 
 
 This filter uses the field code. 
+
+**Example**: "FR" to France 
 
