@@ -1,5 +1,4 @@
 import ipinfo
-
 from django.core.exceptions import PermissionDenied
 
 from .models import AllowCountry
@@ -18,7 +17,7 @@ class FilterCountryIpMiddleware:
         details = handler.getDetails(ip_address)
         try:
             country = details.country.upper()
-        except:
+        except Exception:
             country = "FR"
         if country in allowed_country:
             response = self.get_response(request)
