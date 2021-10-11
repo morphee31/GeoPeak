@@ -11,3 +11,11 @@ class Peak(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.altitude} mètres)"
+
+
+class AllowCountry(models.Model):
+    name = models.CharField(max_length=200)
+    code = models.CharField(max_length=2)
+
+    def __str__(self):
+        return f"{self.name} - {self.code}"
